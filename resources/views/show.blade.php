@@ -96,7 +96,7 @@
     @if ($post->image)
         <figure class="mx-auto max-w-5xl px-4 mt-8">
             <img
-                src="{{ $post->image }}"
+                src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($post->image) }}"
                 alt="{{ $post->title }}"
                 class="w-full aspect-[16/9] object-cover border border-black/10"
             >

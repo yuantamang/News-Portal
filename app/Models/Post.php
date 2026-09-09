@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -12,7 +14,7 @@ use Override;
 
 class Post extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'title',
@@ -29,6 +31,15 @@ class Post extends Model
 
         'is_breaking',
         'is_trending',
+    ];
+
+    protected $casts = [
+        'published_at' => 'date',
+        'view_count' => 'integer',
+        'click_count' => 'integer',
+        'is_featured' => 'boolean',
+        'is_breaking' => 'boolean',
+        'is_trending' => 'boolean',
     ];
 
     #[Override]
@@ -70,5 +81,13 @@ class Post extends Model
     public function media(): MorphMany
     {
         return $this->morphMany(Media::class, 'mediable');
+    }
+
+    /**
+     * Scope a query to only include posts eligible for public display.
+     */
+    public function scopePublished(Builder $query): Builder
+    {
+        return $query->where('status', 'published');
     }
 }

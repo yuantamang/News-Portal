@@ -22,7 +22,7 @@
                     class="block border border-black/10 hover:border-black/30"
                     aria-label="{{ $ad->title }}"
                 >
-                    <img src="{{ $ad->image }}" alt="{{ $ad->title }}" class="w-full object-cover">
+                    <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($ad->image) }}" alt="{{ $ad->title }}" class="w-full object-cover">
                 </a>
             @endforeach
         </div>

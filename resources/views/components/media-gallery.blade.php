@@ -20,7 +20,7 @@
                 @if ($item->type === 'image')
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         @foreach ((array) $item->file_path as $path)
-                            <img src="{{ $path }}" alt="{{ $item->caption ?? '' }}" class="w-full border border-black/10">
+                            <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($path) }}" alt="{{ $item->caption ?? '' }}" class="w-full border border-black/10">
                         @endforeach
                     </div>
                 @elseif ($item->type === 'video')
@@ -37,7 +37,7 @@
                     <div class="flex flex-wrap gap-2">
                         @foreach ((array) $item->file_path as $path)
                             <a
-                                href="{{ $path }}"
+                                href="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($path) }}"
                                 target="_blank"
                                 rel="noopener"
                                 class="inline-flex items-center gap-2 border border-black/15 px-4 py-2 font-sans text-sm hover:border-black"

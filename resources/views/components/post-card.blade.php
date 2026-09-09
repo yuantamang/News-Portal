@@ -23,7 +23,7 @@
     @if ($post->image)
         <a href="/news/{{ $post->slug }}" class="block border border-black/10 overflow-hidden mb-3" tabindex="-1" aria-hidden="true">
             <img
-                src="{{ $post->image }}"
+                src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($post->image) }}"
                 alt=""
                 loading="lazy"
                 class="w-full aspect-[4/3] object-cover transition-transform duration-300 group-hover:scale-[1.02]"

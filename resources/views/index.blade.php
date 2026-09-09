@@ -43,7 +43,7 @@
 
                     @if ($featuredPost->image)
                         <a href="/news/{{ $featuredPost->slug }}" class="block border border-black/10 overflow-hidden mt-6">
-                            <img src="{{ $featuredPost->image }}" alt="" class="w-full aspect-[16/9] object-cover">
+                            <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($featuredPost->image) }}" alt="" class="w-full aspect-[16/9] object-cover">
                         </a>
                     @endif
 

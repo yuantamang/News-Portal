@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\AdvertisementPosition;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Storage;
@@ -10,6 +11,8 @@ use Override;
 
 class Advertisement extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'title',
         'slug',
@@ -28,6 +31,10 @@ class Advertisement extends Model
 
     protected $casts = [
         'position' => AdvertisementPosition::class,
+        'start_at' => 'date',
+        'end_at' => 'date',
+        'view_count' => 'integer',
+        'click_count' => 'integer',
     ];
 
     #[Override]
