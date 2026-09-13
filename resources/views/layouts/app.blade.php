@@ -30,40 +30,31 @@
                      (header/sidebar/footer/inline), pre-filtered to
                      status = active and within the start_at/end_at window
     $contacts        Collection<Contact>    {phone_number, email, link}
+
+    Navigation uses the named routes in routes/web.php exclusively
+    (home, news.category, news.tag, search, news.show) — no hardcoded paths.
 --}}
 
-<header id="top" class="border-b border-black/10">
-    {{-- Utility bar --}}
-    <div class="hidden md:block border-b border-black/10">
-        <div class="mx-auto max-w-7xl px-4 flex items-center justify-between py-2 font-sans text-[11px] font-medium uppercase tracking-wide text-black/60">
-            <p>{{ now()->format('l, F j, Y') }}</p>
-            <nav aria-label="Utility">
-                <ul class="flex items-center gap-4">
-                    <li><a href="/account/login" class="hover:text-black">Sign In</a></li>
-                </ul>
-            </nav>
-        </div>
-    </div>
-
+<header id="top" class="border-t border-black/10">
     {{-- Masthead --}}
-    <div class="mx-auto max-w-7xl px-4 py-6 text-center border-b border-black">
-        <a href="/" class="inline-block font-serif text-4xl md:text-5xl font-bold tracking-tight text-black" aria-label="The Broadsheet — Home">
+    <div class="mx-auto max-w-7xl px-4 pt-7 pb-6 text-center border-b-2 border-black">
+        <a href="{{ route('home') }}" class="inline-block font-serif text-4xl md:text-6xl font-black tracking-tight text-black leading-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary" aria-label="The Broadsheet — Home">
             The Broadsheet
         </a>
-        <p class="font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-black/50 mt-2">
-            Global News &amp; Analysis
+        <p class="font-sans text-[11px] font-semibold uppercase tracking-[0.25em] text-black/50 mt-3">
+            Global News &amp; Analysis <span class="text-black/30">·</span> {{ now()->format('l, F j, Y') }}
         </p>
     </div>
 
     {{-- Primary navigation — category list is real Category data, not a fixed set of section names --}}
-    <div class="mx-auto max-w-7xl px-4">
+    <div class="mx-auto max-w-7xl px-4 border-b border-black/10">
         <div class="flex items-center justify-between py-1 gap-4">
             <nav aria-label="Primary" class="min-w-0">
                 <ul class="hidden lg:flex items-center gap-7 font-sans text-xs font-bold uppercase tracking-wide">
                     @forelse ($navCategories ?? [] as $category)
                         <li>
-                            <a href="/news/category/{{ $category->slug }}"
-                               class="inline-block py-3 border-b-2 border-transparent hover:border-primary transition-colors">
+                            <a href="{{ route('news.category', $category->slug) }}"
+                               class="inline-block py-3 border-b-2 border-transparent hover:border-primary focus-visible:border-primary focus-visible:outline-none transition-colors">
                                 {{ $category->type }}
                             </a>
                         </li>
@@ -73,14 +64,14 @@
                 </ul>
             </nav>
 
-            <div class="hidden lg:block w-56 flex-shrink-0">
+            <div class="hidden lg:block w-64 flex-shrink-0">
                 <x-search-input id="nav-search" />
             </div>
 
             <button
                 id="nav-toggle"
                 type="button"
-                class="lg:hidden btn btn-ghost btn-square rounded-none -ml-3"
+                class="lg:hidden btn btn-ghost btn-square -ml-3"
                 aria-expanded="false"
                 aria-controls="mobile-nav"
             >
@@ -90,7 +81,7 @@
                 </svg>
             </button>
 
-            <a href="/search" class="lg:hidden btn btn-ghost btn-square rounded-none" aria-label="Search">
+            <a href="{{ route('search') }}" class="lg:hidden btn btn-ghost btn-square" aria-label="Search">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <circle cx="11" cy="11" r="7" />
                     <path d="M21 21l-4.3-4.3" stroke-linecap="round" />
@@ -101,7 +92,7 @@
         <ul id="mobile-nav" hidden class="lg:hidden border-t border-black/10 py-2 flex flex-col font-sans text-sm font-bold uppercase tracking-wide">
             @forelse ($navCategories ?? [] as $category)
                 <li>
-                    <a href="/news/category/{{ $category->slug }}" class="block py-2.5 border-b border-black/5">
+                    <a href="{{ route('news.category', $category->slug) }}" class="block py-2.5 border-b border-black/5">
                         {{ $category->type }}
                     </a>
                 </li>
@@ -125,21 +116,21 @@
 </main>
 
 @if (($ads['footer'] ?? collect())->isNotEmpty())
-    <div class="mx-auto max-w-7xl px-4 py-6 border-t border-black/10">
+    <div class="mx-auto max-w-7xl px-4 py-4 border-t border-black/10">
         <x-ad-slot :ads="$ads['footer']" position="footer" />
     </div>
 @endif
 
-<footer class="border-t border-black mt-8">
-    <div class="mx-auto max-w-7xl px-4 py-10 grid grid-cols-2 md:grid-cols-5 gap-x-8 gap-y-10">
-        <div class="col-span-2 md:col-span-2" id="contact-info">
-            <a href="/" class="font-serif text-2xl font-bold text-black">The Broadsheet</a>
-            <p class="font-serif text-sm text-black/60 mt-3 max-w-xs leading-relaxed">
+<footer class="border-t-2 border-black mt-6">
+    <div class="mx-auto max-w-7xl px-4 py-12 grid grid-cols-1 md:grid-cols-5 gap-x-8 gap-y-10">
+        <div class="md:col-span-3" id="contact-info">
+            <a href="{{ route('home') }}" class="inline-block font-serif text-3xl font-black text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">The Broadsheet</a>
+            <p class="font-serif text-base text-black/60 mt-3 max-w-sm leading-relaxed">
                 Independent reporting and analysis, published daily since digital's first edition.
             </p>
 
             @forelse ($contacts ?? [] as $contact)
-                <ul class="mt-4 space-y-1 font-sans text-sm text-black/70">
+                <ul class="mt-5 flex flex-wrap gap-x-6 gap-y-2 font-sans text-sm text-black/70">
                     @if ($contact->phone_number)
                         <li><a href="tel:{{ $contact->phone_number }}" class="hover:text-black hover:underline underline-offset-2">{{ $contact->phone_number }}</a></li>
                     @endif
@@ -155,36 +146,18 @@
             @endforelse
         </div>
 
-        <nav aria-label="Sections">
+        <nav aria-label="Sections" class="md:col-span-2">
             <h2 class="font-sans text-xs font-bold uppercase tracking-wide mb-3">Sections</h2>
-            <ul class="space-y-2 font-sans text-sm text-black/70">
+            <ul class="grid grid-cols-2 gap-x-6 gap-y-2 font-sans text-sm text-black/70">
                 @forelse ($navCategories ?? [] as $category)
                     <li>
-                        <a href="/news/category/{{ $category->slug }}" class="hover:text-black hover:underline underline-offset-2">
+                        <a href="{{ route('news.category', $category->slug) }}" class="hover:text-black hover:underline underline-offset-2">
                             {{ $category->type }}
                         </a>
                     </li>
                 @empty
                     <li class="text-black/40">No categories yet.</li>
                 @endforelse
-            </ul>
-        </nav>
-
-        <nav aria-label="Company">
-            <h2 class="font-sans text-xs font-bold uppercase tracking-wide mb-3">Company</h2>
-            <ul class="space-y-2 font-sans text-sm text-black/70">
-                <li><a href="/about" class="hover:text-black hover:underline underline-offset-2">About Us</a></li>
-                <li><a href="/careers" class="hover:text-black hover:underline underline-offset-2">Careers</a></li>
-                <li><a href="/press" class="hover:text-black hover:underline underline-offset-2">Press</a></li>
-            </ul>
-        </nav>
-
-        <nav aria-label="Legal">
-            <h2 class="font-sans text-xs font-bold uppercase tracking-wide mb-3">Legal</h2>
-            <ul class="space-y-2 font-sans text-sm text-black/70">
-                <li><a href="/privacy" class="hover:text-black hover:underline underline-offset-2">Privacy Policy</a></li>
-                <li><a href="/terms" class="hover:text-black hover:underline underline-offset-2">Terms of Service</a></li>
-                <li><a href="/accessibility" class="hover:text-black hover:underline underline-offset-2">Accessibility</a></li>
             </ul>
         </nav>
     </div>

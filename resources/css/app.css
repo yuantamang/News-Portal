@@ -1,5 +1,58 @@
 @import 'tailwindcss';
-@plugin 'daisyui';
+
+/*
+ * "editorial" is the only theme this site uses — it's applied unconditionally
+ * via data-theme="editorial" on <html> in layouts/app.blade.php, there is no
+ * theme switcher. It exists to give the daisyUI primitives already used in
+ * the templates (btn, input, badge) a deliberate ink/paper/masthead-red
+ * palette and a flat, zero-radius shape instead of daisyUI's stock "light"
+ * theme colors and rounded corners.
+ */
+@plugin 'daisyui' {
+    themes: editorial --default;
+}
+
+@plugin 'daisyui/theme' {
+    name: 'editorial';
+    default: true;
+    color-scheme: light;
+
+    /* Paper + ink — true neutrals, no color cast */
+    --color-base-100: oklch(100% 0 0);
+    --color-base-200: oklch(97% 0 0);
+    --color-base-300: oklch(89% 0 0);
+    --color-base-content: oklch(15% 0 0);
+
+    /* Masthead red — the single accent color, used sparingly for Breaking
+       News, active/primary links, and category labels. */
+    --color-primary: oklch(39% 0.165 27);
+    --color-primary-content: oklch(98% 0 0);
+
+    --color-secondary: oklch(25% 0 0);
+    --color-secondary-content: oklch(98% 0 0);
+    --color-accent: oklch(39% 0.165 27);
+    --color-accent-content: oklch(98% 0 0);
+
+    --color-neutral: oklch(15% 0 0);
+    --color-neutral-content: oklch(98% 0 0);
+
+    --color-info: oklch(55% 0.11 231);
+    --color-info-content: oklch(98% 0 0);
+    --color-success: oklch(50% 0.13 152);
+    --color-success-content: oklch(98% 0 0);
+    --color-warning: oklch(75% 0.15 80);
+    --color-warning-content: oklch(20% 0 0);
+    --color-error: oklch(50% 0.19 25);
+    --color-error-content: oklch(98% 0 0);
+
+    /* Flat, square, hairline-bordered — no rounded daisyUI primitives
+       anywhere on the site, set once here instead of via rounded-none
+       on every btn/input/badge. */
+    --radius-selector: 0rem;
+    --radius-field: 0rem;
+    --radius-box: 0rem;
+    --border: 1px;
+}
 
 @source '../../resources/views/**/*.blade.php';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -8,4 +61,13 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-serif: 'Source Serif 4', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+}
+
+/* Reading-column width used by the article template (resources/views/show.blade.php).
+   Was referenced there already but never defined — the article body and lead
+   image were rendering at an unconstrained width. Defined here rather than in
+   that template so it's a shared, reusable token rather than a one-off value. */
+@utility max-w-measure {
+    max-width: 68ch;
 }
